@@ -1,73 +1,21 @@
-const User =
-  require("../models/User");
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
 
-const bcrypt =
-  require("bcryptjs");
+class AuthService {
+  async register(name, email, password) {
+    const hash = await bcrypt.hash(password, 10);
+    return User.create({ name, email, password: hash });
+  }
 
-const jwt =
-  require("jsonwebtoken");
+  async login(email, password) {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("Invalid");
 
-exports.register =
-  async (body) => {
-    const existingUser =
-      await User.findOne({
-        email: body.email,
-      });
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) throw new Error("Invalid");
 
-    if (existingUser) {
-      throw new Error(
-        "Email already exists"
-      );
-    }
+    return { _id: user._id, name: user.name };
+  }
+}
 
-    const hash =
-      await bcrypt.hash(
-        body.password,
-        10
-      );
-
-    await User.create({
-      name: body.name,
-      email: body.email,
-      password: hash,
-    });
-  };
-
-exports.login =
-  async (body) => {
-    const user =
-      await User.findOne({
-        email: body.email,
-      });
-
-    if (!user) {
-      throw new Error(
-        "User not found"
-      );
-    }
-
-    const match =
-      await bcrypt.compare(
-        body.password,
-        user.password
-      );
-
-    if (!match) {
-      throw new Error(
-        "Wrong Password"
-      );
-    }
-
-    const token =
-      jwt.sign(
-        {
-          id: user._id,
-        },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "1d",
-        }
-      );
-
-    return token;
-  };
+module.exports = new AuthService();

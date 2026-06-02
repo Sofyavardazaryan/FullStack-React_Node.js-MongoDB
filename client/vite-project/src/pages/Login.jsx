@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
 import api from "../services/api";
 
 function Login() {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const loginHandler = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await api.post("/auth/login", {
-        email,
-        password,
-      });
-
-      localStorage.setItem("token", res.data.token);
+      await api.post(
+        "/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
 
       navigate("/todo");
     } catch (err) {
@@ -46,8 +46,7 @@ function Login() {
         <button type="submit">Login</button>
 
         <p>
-          No account?
-          <Link to="/register">Register</Link>
+          No account? <Link to="/register">Register</Link>
         </p>
       </form>
     </div>

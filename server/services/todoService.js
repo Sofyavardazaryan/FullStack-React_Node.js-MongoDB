@@ -1,27 +1,17 @@
-const Todo =
-  require("../models/Todo");
+const Todo = require("../models/Todo");
 
-exports.getTodos =
-  async (userId) => {
-    return await Todo.find({
-      userId,
-    });
-  };
+class TodoService {
+  getAll(userId) {
+    return Todo.find({ userId });
+  }
 
-exports.createTodo =
-  async (
-    title,
-    userId
-  ) => {
-    return await Todo.create({
-      title,
-      userId,
-    });
-  };
+  create(title, userId) {
+    return Todo.create({ title, userId });
+  }
 
-exports.deleteTodo =
-  async (id) => {
-    return await Todo.findByIdAndDelete(
-      id
-    );
-  };
+  delete(id, userId) {
+    return Todo.findOneAndDelete({ _id: id, userId });
+  }
+}
+
+module.exports = new TodoService();

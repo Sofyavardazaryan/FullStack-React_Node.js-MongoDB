@@ -1,21 +1,26 @@
-const todoService = require("../services/todoService");
+const todoService = require("../services/TodoService");
 
-exports.getTodos = async (req, res) => {
-  const todos = await todoService.getTodos(req.user.id);
+class TodoController {
+  async page(req, res) {
+    if (!req.session.user) return res.redirect("/auth/login");
 
-  res.json(todos);
-};
+    const todos = await todoService.getAll(req.session.user._id);
 
-exports.createTodo = async (req, res) => {
-  const todo = await todoService.createTodo(req.body.title, req.user.id);
+    res.render("index", {
+      user: req.session.user,
+      todos
+    });
+  }
 
-  res.json(todo);
-};
+  async create(req, res) {
+    await todoService.create(req.body.title, req.session.user._id);
+    res.redirect("/todos");
+  }
 
-exports.deleteTodo = async (req, res) => {
-  await todoService.deleteTodo(req.params.id);
+  async delete(req, res) {
+    await todoService.delete(req.params.id, req.session.user._id);
+    res.redirect("/todos");
+  }
+}
 
-  res.json({
-    message: "Deleted",
-  });
-};
+module.exports = new TodoController();

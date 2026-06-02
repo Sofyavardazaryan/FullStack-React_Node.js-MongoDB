@@ -1,44 +1,65 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-const cors = require('cors')
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const express = require("express");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const cors = require("cors");
 
-var app = express();
+const authRouter = require("./routes/auth");
+const todoRouter = require("./routes/todo");
 
-const config = {
-  origin : "http://localhost:5173/"
-}
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(cors(config))
-app.use(logger('dev'));
+const app = express();
+
+// DB
+mongoose
+  .connect("mongodb://127.0.0.1:27017/todo-app")
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
+
+// MIDDLEWARE
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// CORS for React (Vite)
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// SESSION
+app.use(
+  session({
+    secret: "secret123",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: "mongodb://127.0.0.1:27017/todo-app",
+    }),
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
+
+// ROUTES
+app.use("/auth", authRouter);
+app.use("/todos", todoRouter);
+
+// TEST
+app.get("/", (req, res) => {
+  res.json({ message: "API running 🚀" });
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// ERROR HANDLER
+app.use((err, req, res, next) => {
+  console.error(err);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Server Error",
+  });
 });
 
 module.exports = app;

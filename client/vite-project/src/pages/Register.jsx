@@ -22,9 +22,17 @@ function Register() {
     e.preventDefault();
 
     try {
-      await api.post("/auth/register", form);
+      await api.post("/auth/register", form, {
+        withCredentials: true,
+      });
 
       alert("Registered Successfully");
+
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+      });
 
       navigate("/");
     } catch (err) {
@@ -41,6 +49,7 @@ function Register() {
           type="text"
           name="name"
           placeholder="Name"
+          value={form.name}
           onChange={handleChange}
           required
         />
@@ -49,6 +58,7 @@ function Register() {
           type="email"
           name="email"
           placeholder="Email"
+          value={form.email}
           onChange={handleChange}
           required
         />
@@ -57,6 +67,7 @@ function Register() {
           type="password"
           name="password"
           placeholder="Password"
+          value={form.password}
           onChange={handleChange}
           required
         />
@@ -64,8 +75,7 @@ function Register() {
         <button type="submit">Register</button>
 
         <p>
-          Already have account?
-          <Link to="/">Login</Link>
+          Already have account? <Link to="/">Login</Link>
         </p>
       </form>
     </div>

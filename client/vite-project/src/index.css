@@ -1,0 +1,148 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #cfd2db, #b2b8c0, #565555);
+}
+
+.container {
+  width: 100%;
+  max-width: 420px;
+  margin: 80px auto;
+}
+
+form {
+  background: white;
+  padding: 35px;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #0f172a;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin-top: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 18px;
+  border: none;
+  border-radius: 10px;
+  background: #98092f;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #9d2a2a;
+}
+
+p {
+  text-align: center;
+  margin-top: 18px;
+}
+
+a {
+  text-decoration: none;
+  color: #14b8a6;
+  font-weight: bold;
+}
+
+.todo-container {
+  width: 90%;
+  max-width: 750px;
+
+  margin: 50px auto;
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 20px;
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.todo-container h1 {
+  text-align: center;
+
+  color: #0f172a;
+
+  margin-bottom: 25px;
+}
+
+.add-box {
+  display: flex;
+
+  gap: 10px;
+
+  margin-bottom: 20px;
+}
+
+.add-box input {
+  flex: 1;
+
+  margin: 0;
+}
+
+.add-box button {
+  width: 130px;
+
+  margin: 0;
+}
+
+.todo-item {
+  background: #f8fafc;
+
+  border-left: 5px solid #14b8a6;
+
+  padding: 16px 20px;
+
+  border-radius: 12px;
+
+  margin-top: 12px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.todo-item span {
+  color: #1e293b;
+
+  font-size: 16px;
+}
+
+.todo-item button {
+  width: 100px;
+
+  margin: 0;
+
+  background: #ef4444;
+}
+
+.todo-item button:hover {
+  background: #dc2626;
+}

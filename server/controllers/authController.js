@@ -6,7 +6,7 @@ class AuthController {
       await authService.register(
         req.body.name,
         req.body.email,
-        req.body.password
+        req.body.password,
       );
 
       res.status(201).json({ message: "User registered" });
@@ -17,13 +17,9 @@ class AuthController {
 
   async login(req, res) {
     try {
-      const user = await authService.login(
-        req.body.email,
-        req.body.password
-      );
+      const user = await authService.login(req.body.email, req.body.password);
 
       req.session.user = user;
-
       res.json({
         message: "Login successful",
         user,

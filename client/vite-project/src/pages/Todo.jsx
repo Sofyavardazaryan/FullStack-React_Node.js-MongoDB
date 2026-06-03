@@ -4,7 +4,9 @@ import api from "../services/api";
 function Todo() {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
+
   const token = localStorage.getItem("token");
+
   const config = {
     headers: {
       Authorization: token,
@@ -14,8 +16,7 @@ function Todo() {
   const loadTodos = async () => {
     try {
       const res = await api.get("/todos", config);
-
-      setTodos(res.data);
+      setTodos(res.data.todos || res.data);
     } catch (err) {
       console.log(err);
     }
@@ -29,15 +30,17 @@ function Todo() {
     if (!title.trim()) return;
 
     await api.post("/todos", { title }, config);
-
     setTitle("");
-
     loadTodos();
   };
 
   const deleteTodo = async (id) => {
     await api.delete(`/todos/${id}`, config);
+    loadTodos();
+  };
 
+  const toggleTodo = async (id) => {
+    await api.patch(`/todos/${id}`, {}, config);
     loadTodos();
   };
 
@@ -57,7 +60,16 @@ function Todo() {
 
       {todos.map((todo) => (
         <div className="todo-item" key={todo._id}>
-          <span>{todo.title}</span>
+          <span
+            onClick={() => toggleTodo(todo._id)}
+            style={{
+              textDecoration: todo.done ? "line-through" : "none",
+              cursor: "pointer",
+            }}
+          >
+            {todo.title}
+          </span>
+
           <button onClick={() => deleteTodo(todo._id)}>Delete</button>
         </div>
       ))}

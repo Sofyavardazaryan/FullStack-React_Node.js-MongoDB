@@ -3,10 +3,8 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cors = require("cors");
-
 const authRouter = require("./routes/auth");
 const todoRouter = require("./routes/todo");
-
 const app = express();
 
 mongoose
@@ -14,7 +12,7 @@ mongoose
     "mongodb://vardazaryansofya_db_user:7S6iLdxCvlp0b2wB@ac-f9bfoqk-shard-00-00.s5i96nt.mongodb.net:27017,ac-f9bfoqk-shard-00-01.s5i96nt.mongodb.net:27017,ac-f9bfoqk-shard-00-02.s5i96nt.mongodb.net:27017/todo-app?ssl=true&replicaSet=atlas-qpga6z-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0",
   )
   .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err));
+  .catch((err) => console.log("MongoDB error:", err));
 
 app.use(express.json());
 

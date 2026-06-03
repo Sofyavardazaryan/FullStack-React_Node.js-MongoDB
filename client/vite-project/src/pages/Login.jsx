@@ -4,10 +4,8 @@ import api from "../services/api";
 
 function Login() {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const loginHandler = async (e) => {
     e.preventDefault();
 
@@ -15,7 +13,7 @@ function Login() {
       await api.post(
         "/auth/login",
         { email, password },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       navigate("/todo");

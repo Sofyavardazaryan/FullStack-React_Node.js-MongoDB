@@ -4,7 +4,7 @@ import api from "../services/api";
 
 function Register() {
   const navigate = useNavigate();
-
+  const [darkMode, setDarkMode] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -41,7 +41,15 @@ function Register() {
   };
 
   return (
-    <div className="container">
+    <div className={`container ${darkMode ? "dark" : "light"}`}>
+      <button
+        className="theme-btn"
+        type="button"
+        onClick={() => setDarkMode(!darkMode)}
+      >
+        {darkMode ? "Light Mode" : "Dark Mode"}
+      </button>
+
       <form onSubmit={submitHandler}>
         <h2>Register</h2>
 

@@ -4,7 +4,7 @@ import api from "../services/api";
 function Todo() {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
-
+  const [darkMode, setDarkMode] = useState(false);
   const token = localStorage.getItem("token");
 
   const config = {
@@ -45,7 +45,11 @@ function Todo() {
   };
 
   return (
-    <div className="todo-container">
+    <div className={`todo-container ${darkMode ? "dark" : "light"}`}>
+      <button className="theme-btn" onClick={() => setDarkMode(!darkMode)}>
+        {darkMode ? "Light Mode" : "Dark Mode"}
+      </button>
+
       <h1>Todo List</h1>
 
       <div className="add-box">

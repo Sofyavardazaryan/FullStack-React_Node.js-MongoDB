@@ -6,6 +6,8 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
+
   const loginHandler = async (e) => {
     e.preventDefault();
 
@@ -23,7 +25,11 @@ function Login() {
   };
 
   return (
-    <div className="container">
+    <div className={`container ${darkMode ? "dark" : "light"}`}>
+      <button className="theme-btn" onClick={() => setDarkMode(!darkMode)}>
+        {darkMode ? "Light Mode" : "Dark Mode"}
+      </button>
+
       <form onSubmit={loginHandler}>
         <h2>Login</h2>
 

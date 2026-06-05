@@ -5,6 +5,7 @@ import api from "../services/api";
 function Register() {
   const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(false);
+  const [lang, setLang] = useState("en");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -26,7 +27,11 @@ function Register() {
         withCredentials: true,
       });
 
-      alert("Registered Successfully");
+      alert(
+        lang === "hy"
+          ? "Գրանցումը հաջողությամբ կատարվեց"
+          : "Registered Successfully",
+      );
 
       setForm({
         name: "",
@@ -36,27 +41,43 @@ function Register() {
 
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Error");
+      alert(err.response?.data?.message || (lang === "hy" ? "Սխալ" : "Error"));
     }
   };
 
   return (
     <div className={`container ${darkMode ? "dark" : "light"}`}>
-      <button
-        className="theme-btn"
-        type="button"
-        onClick={() => setDarkMode(!darkMode)}
-      >
-        {darkMode ? "Light Mode" : "Dark Mode"}
-      </button>
+      <div className="top-bar">
+        <button
+          type="button"
+          className="theme-btn"
+          onClick={() => setDarkMode(!darkMode)}
+        >
+          {darkMode
+            ? lang === "hy"
+              ? "Բաց ռեժիմ"
+              : "Light Mode"
+            : lang === "hy"
+              ? "Մութ ռեժիմ"
+              : "Dark Mode"}
+        </button>
+
+        <button
+          type="button"
+          className="theme-btn"
+          onClick={() => setLang(lang === "hy" ? "en" : "hy")}
+        >
+          {lang === "hy" ? "English" : "Հայերեն"}
+        </button>
+      </div>
 
       <form onSubmit={submitHandler}>
-        <h2>Register</h2>
+        <h2>{lang === "hy" ? "Գրանցում" : "Register"}</h2>
 
         <input
           type="text"
           name="name"
-          placeholder="Name"
+          placeholder={lang === "hy" ? "Անուն" : "Name"}
           value={form.name}
           onChange={handleChange}
           required
@@ -65,7 +86,7 @@ function Register() {
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder={lang === "hy" ? "Էլ. փոստ" : "Email"}
           value={form.email}
           onChange={handleChange}
           required
@@ -74,16 +95,17 @@ function Register() {
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder={lang === "hy" ? "Գաղտնաբառ" : "Password"}
           value={form.password}
           onChange={handleChange}
           required
         />
 
-        <button type="submit">Register</button>
+        <button type="submit">{lang === "hy" ? "Գրանցվել" : "Register"}</button>
 
-        <p>
-          Already have account? <Link to="/">Login</Link>
+        <p style={{ marginTop: "15px", textAlign: "center" }}>
+          {lang === "hy" ? "Արդեն ունե՞ք հաշիվ։" : "Already have an account?"}{" "}
+          <Link to="/">{lang === "hy" ? "Մուտք" : "Login"}</Link>
         </p>
       </form>
     </div>

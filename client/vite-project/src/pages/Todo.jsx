@@ -5,6 +5,8 @@ function Todo() {
   const [todos, setTodos] = useState([]);
   const [title, setTitle] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+  const [lang, setLang] = useState("en");
+
   const token = localStorage.getItem("token");
 
   const config = {
@@ -46,37 +48,65 @@ function Todo() {
 
   return (
     <div className={`todo-container ${darkMode ? "dark" : "light"}`}>
-      <button className="theme-btn" onClick={() => setDarkMode(!darkMode)}>
-        {darkMode ? "Light Mode" : "Dark Mode"}
-      </button>
+      <div className="top-bar">
+        <button
+          type="button"
+          className="theme-btn"
+          onClick={() => setDarkMode(!darkMode)}
+        >
+          {darkMode
+            ? lang === "hy"
+              ? "Բաց ռեժիմ"
+              : "Light Mode"
+            : lang === "hy"
+              ? "Մութ ռեժիմ"
+              : "Dark Mode"}
+        </button>
 
-      <h1>Todo List</h1>
+        <button
+          type="button"
+          className="theme-btn"
+          onClick={() => setLang(lang === "hy" ? "en" : "hy")}
+        >
+          {lang === "hy" ? "English" : "Հայերեն"}
+        </button>
+      </div>
+
+      <h1>{lang === "hy" ? "Անելիքների ցանկ" : "Todo List"}</h1>
 
       <div className="add-box">
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="New Todo"
+          placeholder={lang === "hy" ? "Նոր առաջադրանք" : "New Todo"}
         />
 
-        <button onClick={addTodo}>Add</button>
+        <button onClick={addTodo}>{lang === "hy" ? "Ավելացնել" : "Add"}</button>
       </div>
 
-      {todos.map((todo) => (
-        <div className="todo-item" key={todo._id}>
-          <span
-            onClick={() => toggleTodo(todo._id)}
-            style={{
-              textDecoration: todo.done ? "line-through" : "none",
-              cursor: "pointer",
-            }}
-          >
-            {todo.title}
-          </span>
+      {todos.length === 0 ? (
+        <p style={{ textAlign: "center", marginTop: "10px" }}>
+          {lang === "hy" ? "Դատարկ է" : "No todos yet"}
+        </p>
+      ) : (
+        todos.map((todo) => (
+          <div className="todo-item" key={todo._id}>
+            <span
+              onClick={() => toggleTodo(todo._id)}
+              style={{
+                textDecoration: todo.done ? "line-through" : "none",
+                cursor: "pointer",
+              }}
+            >
+              {todo.title}
+            </span>
 
-          <button onClick={() => deleteTodo(todo._id)}>Delete</button>
-        </div>
-      ))}
+            <button onClick={() => deleteTodo(todo._id)}>
+              {lang === "hy" ? "Ջնջել" : "Delete"}
+            </button>
+          </div>
+        ))
+      )}
     </div>
   );
 }

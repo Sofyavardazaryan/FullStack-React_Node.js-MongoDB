@@ -20,6 +20,14 @@ class AuthController {
       const user = await authService.login(req.body.email, req.body.password);
 
       req.session.user = user;
+
+      res.cookie("userId", user._id, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
       res.json({
         message: "Login successful",
         user,
@@ -31,6 +39,7 @@ class AuthController {
 
   logout(req, res) {
     req.session.destroy(() => {
+      res.clearCookie("userId");
       res.json({ message: "Logged out" });
     });
   }
